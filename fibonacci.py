@@ -5,6 +5,7 @@ def fibonacci(n):
         series.append(a)
         a,b = b, a+b
     return series
-n = 10
+#n = 10 changed to n = 15
+n=15
 print("Fibonacci Series:")
 print(fibonacci(n))
