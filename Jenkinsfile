@@ -1,29 +1,34 @@
 pipeline {
-    agent {
-        dockerfile true
-    }
+    agent any
 
     stages {
 
         stage('Checkout') {
             steps {
                 echo 'Checking out Fibonacci project'
+                checkout scm
             }
         }
 
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Building Fibonacci application'
-                sh 'python3 --version'
-                sh 'python3 -m py_compile fibonacci.py'
+                echo 'Building Docker image'
+                sh '/usr/local/bin/docker build -t fibonacci-app:${BUILD_NUMBER} .'
             }
         }
 
-        stage('Run Fibonacci') {
+        stage('Run Fibonacci Container') {
             steps {
                 echo 'Running Fibonacci application'
-                sh 'python3 fibonacci.py'
+                sh '/usr/local/bin/docker run --rm fibonacci-app:${BUILD_NUMBER}'
             }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up Docker image'
+            sh '/usr/local/bin/docker image rm fibonacci-app:${BUILD_NUMBER} || true'
         }
     }
 }
