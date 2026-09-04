@@ -1,18 +1,19 @@
 pipeline {
-    agent any
+    agent {
+        dockerfile true
+    }
 
     stages {
 
         stage('Checkout') {
             steps {
                 echo 'Checking out Fibonacci project'
-                checkout scm
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Checking Fibonacci Python file'
+                echo 'Building Fibonacci application'
                 sh 'python3 --version'
                 sh 'python3 -m py_compile fibonacci.py'
             }
@@ -20,7 +21,7 @@ pipeline {
 
         stage('Run Fibonacci') {
             steps {
-                echo 'Running Fibonacci program'
+                echo 'Running Fibonacci application'
                 sh 'python3 fibonacci.py'
             }
         }
